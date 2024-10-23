@@ -3,7 +3,7 @@ import pool from "./config/database";
 import dotenv from 'dotenv';
 import productRoutes from '../src/routes/productRoutes'
 
-dotenv.config(); // Load environment variables
+dotenv.config(); 
 
 const app = express();
 const port = process.env.PORT || 3000;
