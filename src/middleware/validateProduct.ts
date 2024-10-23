@@ -15,7 +15,7 @@ export const validateProduct = (req: Request, res: Response, next: NextFunction)
     if (error) {
       res.status(400).json({ error: error.details[0].message });
     } else {
-      next(); // Make sure next() is called after validation passes
+      next(); 
     }
   };
 
