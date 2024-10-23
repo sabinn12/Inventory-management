@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createProductService, updateProductService } from '../services/productService';
+import { createProductService, updateProductService, deleteProductService  } from '../services/productService';
 
 // POST: Add a new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -41,3 +41,18 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
          next(error); // Pass error to the error handling middleware
     }
 };
+
+// DELETE: Delete a product (only if quantity is 0)
+export const deleteProduct = async (req: Request, res: Response) => {
+    const { id } = req.params;
+  
+    try {
+      const deletedProduct = await deleteProductService(Number(id));
+  
+      // Return success message
+      return res.status(200).json({ message: 'Product deleted successfully', product: deletedProduct });
+    } catch (error: any) {
+      // Return error message
+      return res.status(400).json({ error: error.message });
+    }
+  };

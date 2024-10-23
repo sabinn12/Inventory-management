@@ -61,3 +61,35 @@ export const updateProductService = async (id: number, updates: ProductUpdate) =
   const result = await pool.query(query, values);
   return result.rows[0];
 };
+
+/// Function to delete a product
+export const deleteProductService = async (id: number) => {
+    try {
+      // Check if the product exists and its quantity
+      const existingProduct = await pool.query(
+        'SELECT * FROM products WHERE id = $1',
+        [id]
+      );
+  
+      if (existingProduct.rows.length === 0) {
+        throw new Error('Product not found');
+      }
+  
+      const product = existingProduct.rows[0];
+  
+      // Check if the quantity is greater than 0
+      if (product.quantity > 0) {
+        throw new Error('Cannot delete product with quantity greater than 0');
+      }
+  
+      // Delete the product
+      const result = await pool.query(
+        'DELETE FROM products WHERE id = $1 RETURNING *',
+        [id]
+      );
+  
+      return result.rows[0]; // Return the deleted product details
+    } catch (error) {
+      throw error; // Propagate error to be handled in the controller
+    }
+  };
