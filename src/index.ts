@@ -1,6 +1,7 @@
 import express from "express";
 import pool from "./config/database";
 import dotenv from 'dotenv';
+import productRoutes from '../src/routes/productRoutes'
 
 dotenv.config(); // Load environment variables
 
@@ -8,6 +9,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+
+// Route for handling products
+app.use('/api', productRoutes);
+
 
 app.get("/test-db", async (req, res) => {
   try {
