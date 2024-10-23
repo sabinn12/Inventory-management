@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService } from '../services/productService';
-import { Product } from '../models/productModel'; // Import the Product interface
+import { Product } from '../models/productModel'; 
 
 // POST: Add a new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -19,7 +19,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
   }
 };
 
-// PUT: Update product details (name, category, quantity)
+// PUT: Update product details 
 export const updateProduct = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
   const { id } = req.params;
   const { name, category, quantity } = req.body;
@@ -49,11 +49,8 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
   try {
     const deletedProduct: Product = await deleteProductService(Number(id));
-
-    // Return success message
     return res.status(200).json({ message: 'Product deleted successfully', product: deletedProduct });
   } catch (error: any) {
-    // Return error message
     return res.status(400).json({ error: error.message });
   }
 };
