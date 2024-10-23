@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createProductService, updateProductService, deleteProductService  } from '../services/productService';
+import { createProductService, updateProductService, deleteProductService, getAllProductsService,  getProductByIdService } from '../services/productService';
 
 // POST: Add a new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -56,3 +56,25 @@ export const deleteProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ error: error.message });
     }
   };
+
+  // GET: Retrieve all products
+export const getAllProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getAllProductsService();
+    return res.status(200).json({ message: 'Products retrieved successfully', products });
+  } catch (error: any) {
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// GET: Retrieve a product by ID
+export const getProductById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const product = await getProductByIdService(Number(id));
+    return res.status(200).json({ message: 'Product retrieved successfully', product });
+  } catch (error: any) {
+    return res.status(404).json({ error: error.message });
+  }
+};

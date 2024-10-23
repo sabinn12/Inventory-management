@@ -93,3 +93,28 @@ export const deleteProductService = async (id: number) => {
       throw error; // Propagate error to be handled in the controller
     }
   };
+
+  // Retrieve all products
+export const getAllProductsService = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM products');
+    return result.rows; // Return all products
+  } catch (error) {
+    throw error; // Propagate error to be handled in the controller
+  }
+};
+
+// Retrieve a product by ID
+export const getProductByIdService = async (id: number) => {
+  try {
+    const result = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+
+    if (result.rows.length === 0) {
+      throw new Error('Product not found');
+    }
+
+    return result.rows[0]; // Return the product
+  } catch (error) {
+    throw error; // Propagate error to be handled in the controller
+  }
+};
