@@ -6,17 +6,18 @@ import { validateProduct, validateProductUpdate } from '../middleware/validatePr
 
 const router = Router();
 
-// POST: Create a new product (with validation middleware)
+// POST
 router.post('/products', validateProduct, createProduct);
-// PUT: Update product details
+
+// PUT
 // @ts-ignore
 router.patch('/products/:id', validateProductUpdate,updateProduct);
 
-// DELETE: Delete a product (only if quantity is 0)
+// DELETE
 // @ts-ignore
 router.delete('/products/:id', deleteProduct);
 
-// GET: Retrieve all products
+// GET
 // @ts-ignore
 router.get('/products', getAllProducts);
 
