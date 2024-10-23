@@ -1,7 +1,8 @@
-import pool from './../config/database';
+import pool from '../config/database';
+import { Product } from '../models/productModel'; // Import the Product model
 
 // Function to create a new product
-export const createProductService = async (name: string, quantity: number, category: string) => {
+export const createProductService = async (name: string, quantity: number, category: string): Promise<Product> => {
   try {
     // Check if the product name already exists
     const existingProduct = await pool.query(
@@ -19,19 +20,20 @@ export const createProductService = async (name: string, quantity: number, categ
       [name, quantity, category]
     );
 
-    return result.rows[0]; // Return the newly created product
+    return result.rows[0] as Product; // Return the newly created product
   } catch (error) {
     throw error; // Propagate error to be handled in the controller
   }
 };
 
 interface ProductUpdate {
-    name?: string;
-    category?: string;
-    quantity?: number;
-  }
-// Update product details
-export const updateProductService = async (id: number, updates: ProductUpdate) => {
+  name?: string;
+  category?: string;
+  quantity?: number;
+}
+
+// Function to update product details
+export const updateProductService = async (id: number, updates: ProductUpdate): Promise<Product | null> => {
   const fields = [];
   const values = [];
 
@@ -59,53 +61,47 @@ export const updateProductService = async (id: number, updates: ProductUpdate) =
   values.push(id);  // Add the product ID to the values array
 
   const result = await pool.query(query, values);
-  return result.rows[0];
+  return result.rows[0] as Product;
 };
 
-/// Function to delete a product
-export const deleteProductService = async (id: number) => {
-    try {
-      // Check if the product exists and its quantity
-      const existingProduct = await pool.query(
-        'SELECT * FROM products WHERE id = $1',
-        [id]
-      );
-  
-      if (existingProduct.rows.length === 0) {
-        throw new Error('Product not found');
-      }
-  
-      const product = existingProduct.rows[0];
-  
-      // Check if the quantity is greater than 0
-      if (product.quantity > 0) {
-        throw new Error('Cannot delete product with quantity greater than 0');
-      }
-  
-      // Delete the product
-      const result = await pool.query(
-        'DELETE FROM products WHERE id = $1 RETURNING *',
-        [id]
-      );
-  
-      return result.rows[0]; // Return the deleted product details
-    } catch (error) {
-      throw error; // Propagate error to be handled in the controller
-    }
-  };
-
-  // Retrieve all products
-export const getAllProductsService = async () => {
+// Function to delete a product
+export const deleteProductService = async (id: number): Promise<Product> => {
   try {
-    const result = await pool.query('SELECT * FROM products');
-    return result.rows; // Return all products
+    // Check if the product exists and its quantity
+    const existingProduct = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
+
+    if (existingProduct.rows.length === 0) {
+      throw new Error('Product not found');
+    }
+
+    const product = existingProduct.rows[0];
+
+    // Check if the quantity is greater than 0
+    if (product.quantity > 0) {
+      throw new Error('Cannot delete product with quantity greater than 0');
+    }
+
+    // Delete the product
+    const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [id]);
+
+    return result.rows[0] as Product; // Return the deleted product details
   } catch (error) {
     throw error; // Propagate error to be handled in the controller
   }
 };
 
-// Retrieve a product by ID
-export const getProductByIdService = async (id: number) => {
+// Function to retrieve all products
+export const getAllProductsService = async (): Promise<Product[]> => {
+  try {
+    const result = await pool.query('SELECT * FROM products');
+    return result.rows as Product[]; // Return all products
+  } catch (error) {
+    throw error; // Propagate error to be handled in the controller
+  }
+};
+
+// Function to retrieve a product by ID
+export const getProductByIdService = async (id: number): Promise<Product> => {
   try {
     const result = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
 
@@ -113,7 +109,7 @@ export const getProductByIdService = async (id: number) => {
       throw new Error('Product not found');
     }
 
-    return result.rows[0]; // Return the product
+    return result.rows[0] as Product; // Return the product
   } catch (error) {
     throw error; // Propagate error to be handled in the controller
   }
