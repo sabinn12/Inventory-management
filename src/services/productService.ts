@@ -1,5 +1,5 @@
 import pool from '../config/database';
-import { Product } from '../models/productModel'; // Import the Product model
+import { Product } from '../models/productModel'; 
 
 // Function to create a new product
 export const createProductService = async (name: string, quantity: number, category: string): Promise<Product> => {
@@ -20,9 +20,9 @@ export const createProductService = async (name: string, quantity: number, categ
       [name, quantity, category]
     );
 
-    return result.rows[0] as Product; // Return the newly created product
+    return result.rows[0] as Product; 
   } catch (error) {
-    throw error; // Propagate error to be handled in the controller
+    throw error; 
   }
 };
 
@@ -86,7 +86,7 @@ export const deleteProductService = async (id: number): Promise<Product> => {
 
     return result.rows[0] as Product; // Return the deleted product details
   } catch (error) {
-    throw error; // Propagate error to be handled in the controller
+    throw error; 
   }
 };
 
@@ -96,7 +96,7 @@ export const getAllProductsService = async (): Promise<Product[]> => {
     const result = await pool.query('SELECT * FROM products');
     return result.rows as Product[]; // Return all products
   } catch (error) {
-    throw error; // Propagate error to be handled in the controller
+    throw error; 
   }
 };
 
@@ -111,6 +111,6 @@ export const getProductByIdService = async (id: number): Promise<Product> => {
 
     return result.rows[0] as Product; // Return the product
   } catch (error) {
-    throw error; // Propagate error to be handled in the controller
+    throw error; 
   }
 };
