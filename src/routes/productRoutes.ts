@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProduct, updateProduct, deleteProduct, getAllProducts,  getProductById, filterProductsByCategory, filterProductsByQuantity, getEventLogs} from '../controllers/productController';
+import { createProduct, updateProduct, deleteProduct, getAllProducts,  getProductById, filterProductsByCategory, filterProductsByQuantity, getEventLogs, getPaginatedProducts} from '../controllers/productController';
 import { validateProduct, validateProductUpdate, validateQuantityFilter } from '../middleware/validateProduct';
 
 
@@ -36,6 +36,10 @@ router.get('/products/filter/quantity', validateQuantityFilter, filterProductsBy
 // Route to get all event logs
 //@ts-ignore
 router.get('/event-logs', getEventLogs);
+
+// Paginated product retrieval route
+//@ts-ignore
+router.get('/products', getPaginatedProducts);
 
 
 export default router;

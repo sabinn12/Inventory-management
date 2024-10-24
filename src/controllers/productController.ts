@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService, filterProductsByQuantityService, filterProductsByCategoryService, getEventLogsService } from '../services/productService';
+import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService, filterProductsByQuantityService, filterProductsByCategoryService, getEventLogsService, getProductsWithPagination } from '../services/productService';
 import { Product, EventLog } from '../models/productModel'; 
 
 // POST: Add a new product
@@ -121,3 +121,29 @@ export const getEventLogs = async (req: Request, res: Response): Promise<Respons
     return res.status(500).json({ error: error.message });
   }
 };
+
+
+// Pagination controller
+export const getPaginatedProducts = async (req: Request, res: Response) => {
+  try {
+    const page = parseInt(req.query.page as string) || 1;
+    const itemsPerPage = parseInt(req.query.itemsPerPage as string) || 10;
+
+    // Call service to fetch products with pagination
+    const { products, totalPages, totalProducts } = await getProductsWithPagination(page, itemsPerPage);
+
+    // Send response
+    res.status(200).json({
+      message: 'Products retrieved successfully',
+      products,
+      currentPage: page,
+      totalPages,
+      totalProducts,
+    });
+  } catch (error: any) {
+    console.error('Error retrieving paginated products:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+

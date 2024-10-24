@@ -186,3 +186,38 @@ export const getEventLogsService = async (): Promise<EventLog[]> => {
   }
 };
 
+
+
+// Pagination logic 
+export const getProductsWithPagination = async (page: number, itemsPerPage: number) => {
+  // Calculate offset
+  const offset = (page - 1) * itemsPerPage;
+
+  console.log(`Running Query: SELECT * FROM products ORDER BY id ASC LIMIT ${itemsPerPage} OFFSET ${offset}`);
+
+  try {
+    // Get total count of products
+    const totalQuery = await pool.query('SELECT COUNT(*) FROM products');
+    const totalProducts = parseInt(totalQuery.rows[0].count);
+
+    // Get paginated products
+    const productQuery = await pool.query(
+      'SELECT * FROM products ORDER BY id ASC LIMIT $1 OFFSET $2',
+      [itemsPerPage, offset]
+    );
+    const products = productQuery.rows;
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+    return {
+      products,
+      totalPages,
+      totalProducts,
+    };
+  } catch (error: any) {
+    console.error("Error in pagination service:", error.message);
+    throw new Error("Error fetching paginated products");
+  }
+};
+
