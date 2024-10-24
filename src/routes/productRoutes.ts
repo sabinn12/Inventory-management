@@ -17,6 +17,11 @@ router.patch('/products/:id', validateProductUpdate,updateProduct);
 // @ts-ignore
 router.delete('/products/:id', deleteProduct);
 
+// Paginated product retrieval route
+//@ts-ignore
+router.get('/products/paginated', getPaginatedProducts);
+
+
 // GET
 // @ts-ignore
 router.get('/products', getAllProducts);
@@ -37,9 +42,7 @@ router.get('/products/filter/quantity', validateQuantityFilter, filterProductsBy
 //@ts-ignore
 router.get('/event-logs', getEventLogs);
 
-// Paginated product retrieval route
-//@ts-ignore
-router.get('/products', getPaginatedProducts);
+
 
 
 export default router;

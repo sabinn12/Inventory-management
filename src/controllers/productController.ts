@@ -126,13 +126,18 @@ export const getEventLogs = async (req: Request, res: Response): Promise<Respons
 // Pagination controller
 export const getPaginatedProducts = async (req: Request, res: Response) => {
   try {
+    // Ensure page and itemsPerPage are integers and set defaults if undefined
     const page = parseInt(req.query.page as string) || 1;
     const itemsPerPage = parseInt(req.query.itemsPerPage as string) || 10;
 
-    // Call service to fetch products with pagination
+    // Validate that page and itemsPerPage are valid numbers
+    if (isNaN(page) || isNaN(itemsPerPage)) {
+      return res.status(400).json({ error: 'Page and itemsPerPage must be valid integers' });
+    }
+
     const { products, totalPages, totalProducts } = await getProductsWithPagination(page, itemsPerPage);
 
-    // Send response
+    // Send the response back
     res.status(200).json({
       message: 'Products retrieved successfully',
       products,
@@ -145,5 +150,6 @@ export const getPaginatedProducts = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 

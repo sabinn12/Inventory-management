@@ -192,9 +192,6 @@ export const getEventLogsService = async (): Promise<EventLog[]> => {
 export const getProductsWithPagination = async (page: number, itemsPerPage: number) => {
   // Calculate offset
   const offset = (page - 1) * itemsPerPage;
-
-  console.log(`Running Query: SELECT * FROM products ORDER BY id ASC LIMIT ${itemsPerPage} OFFSET ${offset}`);
-
   try {
     // Get total count of products
     const totalQuery = await pool.query('SELECT COUNT(*) FROM products');
