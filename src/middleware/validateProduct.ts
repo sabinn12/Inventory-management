@@ -39,3 +39,20 @@ export const validateProduct = (req: Request, res: Response, next: NextFunction)
   
     next();
   };
+
+
+  // validate min quantity if its a number
+
+  export const validateQuantityFilter = (req: Request, res: Response, next: NextFunction) => {
+    const { minQuantity, maxQuantity } = req.query;
+  
+    if (minQuantity && isNaN(Number(minQuantity))) {
+      return res.status(400).json({ error: 'minQuantity must be a number' });
+    }
+  
+    if (maxQuantity && isNaN(Number(maxQuantity))) {
+      return res.status(400).json({ error: 'maxQuantity must be a number' });
+    }
+  
+    next();
+  };
