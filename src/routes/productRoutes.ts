@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProduct, updateProduct, deleteProduct, getAllProducts,  getProductById} from '../controllers/productController';
+import { createProduct, updateProduct, deleteProduct, getAllProducts,  getProductById, filterProductsByCategory, filterProductsByQuantity} from '../controllers/productController';
 import { validateProduct, validateProductUpdate } from '../middleware/validateProduct';
 
 
@@ -24,5 +24,13 @@ router.get('/products', getAllProducts);
 // GET: Retrieve a product by ID
 // @ts-ignore
 router.get('/products/:id', getProductById);
+
+// Route to filter products by category
+//@ts-ignore
+router.get('/products/filter/category', filterProductsByCategory);
+
+// Route to filter products by quantity range
+//@ts-ignore
+router.get('/products/filter/quantity', filterProductsByQuantity);
 
 export default router;

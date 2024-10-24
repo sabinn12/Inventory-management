@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService } from '../services/productService';
+import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService, filterProductsByQuantityService, filterProductsByCategoryService } from '../services/productService';
 import { Product } from '../models/productModel'; 
 
 // POST: Add a new product
@@ -74,5 +74,39 @@ export const getProductById = async (req: Request, res: Response) => {
     return res.status(200).json({ message: 'Product retrieved successfully', product });
   } catch (error: any) {
     return res.status(404).json({ error: error.message });
+  }
+};
+
+
+// GET: Filter products by category
+export const filterProductsByCategory = async (req: Request, res: Response) => {
+  const { category } = req.query;
+
+  try {
+    const products = await filterProductsByCategoryService(String(category));
+    if (products.length > 0) {
+      return res.status(200).json({ products });
+    } else {
+      return res.status(404).json({ message: 'No products found in this category' });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// GET: Filter products by quantity range
+export const filterProductsByQuantity = async (req: Request, res: Response) => {
+  const minQuantity = Number(req.query.minQuantity) || 0; // Default to 0
+  const maxQuantity = Number(req.query.maxQuantity) || Infinity; // Default to no upper limit
+
+  try {
+    const products = await filterProductsByQuantityService(minQuantity, maxQuantity);
+    if (products.length > 0) {
+      return res.status(200).json({ products });
+    } else {
+      return res.status(404).json({ message: 'No products found within the specified quantity range' });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ error: 'Server error' });
   }
 };
