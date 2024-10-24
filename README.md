@@ -24,6 +24,33 @@ This is an API-based inventory management system built with Node.js, Express, an
     
        API Endpoints
 
+  .POST /products
+Create a new product.
+
+  .PATCH /products/:id
+Update an existing product by its ID.
+
+  .DELETE /products/:id
+Delete a product by its ID.
+
+  .GET /products
+Get all products.
+GET /products/:id
+
+Get a specific product by its ID.
+GET /products/filter/category
+
+Filter products by category.
+GET /products/filter/quantity
+
+Filter products by quantity range.
+GET /event-logs
+
+Retrieve all event logs.
+GET /products/paginated
+
+Get products with pagination.
+
 
 
 
