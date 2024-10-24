@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService, filterProductsByQuantityService, filterProductsByCategoryService } from '../services/productService';
-import { Product } from '../models/productModel'; 
+import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService, filterProductsByQuantityService, filterProductsByCategoryService, getEventLogsService } from '../services/productService';
+import { Product, EventLog } from '../models/productModel'; 
 
 // POST: Add a new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -110,4 +110,14 @@ export const filterProductsByQuantity = async (req: Request, res: Response) => {
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-}
+};
+
+// Controller to retrieve all event logs
+export const getEventLogs = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const logs: EventLog[] = await getEventLogsService();
+    return res.status(200).json({ logs });
+  } catch (error: any) {
+    return res.status(500).json({ error: error.message });
+  }
+};

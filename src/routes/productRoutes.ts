@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createProduct, updateProduct, deleteProduct, getAllProducts,  getProductById, filterProductsByCategory, filterProductsByQuantity} from '../controllers/productController';
+import { createProduct, updateProduct, deleteProduct, getAllProducts,  getProductById, filterProductsByCategory, filterProductsByQuantity, getEventLogs} from '../controllers/productController';
 import { validateProduct, validateProductUpdate, validateQuantityFilter } from '../middleware/validateProduct';
 
 
@@ -32,5 +32,10 @@ router.get('/products/filter/category', filterProductsByCategory);
 // Route to filter products by quantity range
 //@ts-ignore
 router.get('/products/filter/quantity', validateQuantityFilter, filterProductsByQuantity);
+
+// Route to get all event logs
+//@ts-ignore
+router.get('/event-logs', getEventLogs);
+
 
 export default router;

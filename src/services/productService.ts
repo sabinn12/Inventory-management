@@ -1,5 +1,5 @@
 import pool from '../config/database';
-import { Product } from '../models/productModel'; 
+import { Product, EventLog } from '../models/productModel';
 
 // Function to create a new product
 export const createProductService = async (name: string, quantity: number, category: string): Promise<Product> => {
@@ -19,6 +19,8 @@ export const createProductService = async (name: string, quantity: number, categ
       'INSERT INTO products (name, quantity, category) VALUES ($1, $2, $3) RETURNING *',
       [name, quantity, category]
     );
+     // Log the 'Added' event
+     await logEvent(result.rows[0].id, 'Added');
 
     return result.rows[0] as Product; 
   } catch (error) {
@@ -61,6 +63,10 @@ export const updateProductService = async (id: number, updates: ProductUpdate): 
   values.push(id);  // Add the product ID to the values array
 
   const result = await pool.query(query, values);
+   // Log the 'Updated' event, with details of what was updated
+   const details = `Updated fields: ${Object.keys(updates).join(', ')}`;
+   await logEvent(id, 'Updated', details);
+
   return result.rows[0] as Product;
 };
 
@@ -83,7 +89,8 @@ export const deleteProductService = async (id: number): Promise<Product> => {
 
     // Delete the product
     const result = await pool.query('DELETE FROM products WHERE id = $1 RETURNING *', [id]);
-
+    // Log the 'Deleted' event
+     await logEvent(id, 'Deleted');
     return result.rows[0] as Product; // Return the deleted product details
   } catch (error) {
     throw error; 
@@ -148,6 +155,34 @@ export const filterProductsByQuantityService = async (minQuantity: any, maxQuant
     return result.rows;
   } catch (error) {
     throw error; // Propagate error to be handled in the controller
+  }
+};
+
+
+// Function to log events in the database
+export const logEvent = async (productId: number, action: string, details?: string): Promise<EventLog> => {
+  try {
+    const result = await pool.query(
+      'INSERT INTO event_logs (product_id, action, details) VALUES ($1, $2, $3) RETURNING *',
+      [productId, action, details]
+    );
+
+    const eventLog: EventLog = result.rows[0];
+    return eventLog;
+  } catch (error) {
+    console.error('Error logging event:', error);
+    throw error;
+  }
+};
+
+// Function to get all event logs
+export const getEventLogsService = async (): Promise<EventLog[]> => {
+  try {
+    const result = await pool.query('SELECT * FROM event_logs ORDER BY timestamp DESC');
+    const eventLogs: EventLog[] = result.rows;
+    return eventLogs;
+  } catch (error) {
+    throw error;
   }
 };
 
