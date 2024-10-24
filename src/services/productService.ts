@@ -130,14 +130,23 @@ export const filterProductsByCategoryService = async (category: string) => {
 };
 
 // Service to filter products by quantity range
-export const filterProductsByQuantityService = async (minQuantity: number, maxQuantity: number) => {
+export const filterProductsByQuantityService = async (minQuantity: any, maxQuantity: any) => {
   try {
+    // Convert the query parameters to numbers
+    const min = parseInt(minQuantity, 10);
+    const max = parseInt(maxQuantity, 10);
+
+    // Check if the conversion to number failed
+    if (isNaN(min) || isNaN(max)) {
+      throw new Error('Quantity range must be valid numbers');
+    }
+
     const result = await pool.query(
       'SELECT * FROM products WHERE quantity BETWEEN $1 AND $2',
-      [minQuantity, maxQuantity]
+      [min, max]
     );
     return result.rows;
   } catch (error) {
-    throw error;
+    throw error; // Propagate error to be handled in the controller
   }
-};  
+};

@@ -78,35 +78,34 @@ export const getProductById = async (req: Request, res: Response) => {
 };
 
 
-// GET: Filter products by category
+// Filter products by category
 export const filterProductsByCategory = async (req: Request, res: Response) => {
   const { category } = req.query;
 
   try {
-    const products = await filterProductsByCategoryService(String(category));
-    if (products.length > 0) {
-      return res.status(200).json({ products });
-    } else {
-      return res.status(404).json({ message: 'No products found in this category' });
+    if (!category) {
+      return res.status(400).json({ error: 'Category is required' });
     }
+
+    const products = await filterProductsByCategoryService(category as string);
+    return res.status(200).json({ message: 'Products retrieved successfully', products });
   } catch (error: any) {
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: error.message });
   }
 };
 
-// GET: Filter products by quantity range
+// Filter products by quantity range
 export const filterProductsByQuantity = async (req: Request, res: Response) => {
-  const minQuantity = Number(req.query.minQuantity) || 0; // Default to 0
-  const maxQuantity = Number(req.query.maxQuantity) || Infinity; // Default to no upper limit
+  const { minQuantity, maxQuantity } = req.query;
 
   try {
-    const products = await filterProductsByQuantityService(minQuantity, maxQuantity);
-    if (products.length > 0) {
-      return res.status(200).json({ products });
-    } else {
-      return res.status(404).json({ message: 'No products found within the specified quantity range' });
+    if (!minQuantity || !maxQuantity) {
+      return res.status(400).json({ error: 'Both minQuantity and maxQuantity are required' });
     }
+
+    const products = await filterProductsByQuantityService(minQuantity, maxQuantity);
+    return res.status(200).json({ message: 'Products retrieved successfully', products });
   } catch (error: any) {
-    return res.status(500).json({ error: 'Server error' });
+    return res.status(500).json({ error: error.message });
   }
 };
