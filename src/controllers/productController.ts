@@ -94,18 +94,20 @@ export const filterProductsByCategory = async (req: Request, res: Response) => {
   }
 };
 
+
+
+
 // Filter products by quantity range
 export const filterProductsByQuantity = async (req: Request, res: Response) => {
   const { minQuantity, maxQuantity } = req.query;
 
   try {
-    if (!minQuantity || !maxQuantity) {
-      return res.status(400).json({ error: 'Both minQuantity and maxQuantity are required' });
-    }
+    const min = parseInt(minQuantity as string, 10);
+    const max = parseInt(maxQuantity as string, 10);
 
-    const products = await filterProductsByQuantityService(minQuantity, maxQuantity);
+    const products = await filterProductsByQuantityService(min, max);
     return res.status(200).json({ message: 'Products retrieved successfully', products });
   } catch (error: any) {
     return res.status(500).json({ error: error.message });
   }
-};
+}

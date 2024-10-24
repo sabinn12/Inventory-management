@@ -41,18 +41,23 @@ export const validateProduct = (req: Request, res: Response, next: NextFunction)
   };
 
 
-  // validate min quantity if its a number
+  // Middleware to validate the quantity filter
+export const validateQuantityFilter = (req: Request, res: Response, next: NextFunction) => {
+  const { minQuantity, maxQuantity } = req.query;
 
-  export const validateQuantityFilter = (req: Request, res: Response, next: NextFunction) => {
-    const { minQuantity, maxQuantity } = req.query;
-  
-    if (minQuantity && isNaN(Number(minQuantity))) {
-      return res.status(400).json({ error: 'minQuantity must be a number' });
-    }
-  
-    if (maxQuantity && isNaN(Number(maxQuantity))) {
-      return res.status(400).json({ error: 'maxQuantity must be a number' });
-    }
-  
-    next();
-  };
+  // Ensure both minQuantity and maxQuantity are present
+  if (!minQuantity || !maxQuantity) {
+    return res.status(400).json({ error: 'Both minQuantity and maxQuantity are required' });
+  }
+
+  // Parse and validate they are numbers
+  const min = parseInt(minQuantity as string, 10);
+  const max = parseInt(maxQuantity as string, 10);
+
+  if (isNaN(min) || isNaN(max)) {
+    return res.status(400).json({ error: 'Quantity values must be valid numbers' });
+  }
+
+  next(); // Proceed to the controller if validation passes
+};
+

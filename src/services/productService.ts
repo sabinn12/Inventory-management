@@ -132,7 +132,7 @@ export const filterProductsByCategoryService = async (category: string) => {
 // Service to filter products by quantity range
 export const filterProductsByQuantityService = async (minQuantity: any, maxQuantity: any) => {
   try {
-    // Convert the query parameters to numbers
+    // Ensure the query parameters are properly converted to numbers
     const min = parseInt(minQuantity, 10);
     const max = parseInt(maxQuantity, 10);
 
@@ -150,3 +150,4 @@ export const filterProductsByQuantityService = async (minQuantity: any, maxQuant
     throw error; // Propagate error to be handled in the controller
   }
 };
+
