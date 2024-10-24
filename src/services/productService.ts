@@ -114,3 +114,30 @@ export const getProductByIdService = async (id: number): Promise<Product> => {
     throw error; 
   }
 };
+
+
+// Service to filter products by category
+export const filterProductsByCategoryService = async (category: string) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM products WHERE category = $1',
+      [category]
+    );
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Service to filter products by quantity range
+export const filterProductsByQuantityService = async (minQuantity: number, maxQuantity: number) => {
+  try {
+    const result = await pool.query(
+      'SELECT * FROM products WHERE quantity BETWEEN $1 AND $2',
+      [minQuantity, maxQuantity]
+    );
+    return result.rows;
+  } catch (error) {
+    throw error;
+  }
+};  
