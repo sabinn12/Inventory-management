@@ -10,7 +10,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
     const product: Product = await createProductService(name, quantity, category);
     res.status(201).json({ product });
   } catch (error: any) {
-    if (error.message === 'Product with this name already exists') {
+    if (error.message === 'Product with this Name already exists') {
       res.status(400).json({ error: error.message });
     } else {
       console.error(error);
