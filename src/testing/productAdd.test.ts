@@ -22,9 +22,9 @@ describe('Product API tests', () => {
 
   it('should create a new product and return 201 status', (done) => {
     const newProduct = {
-      name: 'Lap',
-      quantity: 110,
-      category: 'irakiza',
+      name: 'iphone11',
+      quantity: 2,
+      category: 'Telephones',
     };
 
     request(app)
