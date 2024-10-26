@@ -14,7 +14,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
       res.status(400).json({ error: error.message });
     } else {
       console.error(error);
-      res.status(500).json({ error: 'Server error' });
+      res.status(500).json({ error: 'Server Error' });
     }
   }
 };
