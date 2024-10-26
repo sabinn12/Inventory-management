@@ -12,7 +12,7 @@
     "sourceMap": true,                                   /* Generate source maps for easier debugging. */
     "removeComments": true,                              /* Remove comments in the compiled JavaScript. */
     "resolveJsonModule": true   ,                         /* Enable importing .json files. */
-    "types": ["node", "jest", "pg", "express", "dotenv", "joi", "supertest"]
+    
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
