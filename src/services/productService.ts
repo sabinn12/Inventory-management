@@ -1,5 +1,5 @@
 import pool from '../config/database';
-import { Product, EventLog } from '../models/productModel';
+import { Product, EventLog } from '../models/productModel.js';
 
 // Function to create a new product
 export const createProductService = async (name: string, quantity: number, category: string): Promise<Product> => {

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { createProductService, updateProductService, deleteProductService, getAllProductsService, getProductByIdService, filterProductsByQuantityService, filterProductsByCategoryService, getEventLogsService, getProductsWithPagination } from '../services/productService';
-import { Product, EventLog } from '../models/productModel'; 
+import { Product, EventLog } from '../models/productModel.js'; 
 
 // POST: Add a new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
