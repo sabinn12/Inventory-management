@@ -1,7 +1,7 @@
 import express from "express";
 import pool from "./config/database";
 import dotenv from 'dotenv';
-import productRoutes from '../src/routes/productRoutes'
+import productRoutes from './routes/productRoutes'
 
 dotenv.config(); 
 
