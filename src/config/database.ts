@@ -9,6 +9,8 @@ const pool = new Pool({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: parseInt(process.env.DB_PORT || '5432', 10),
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false, // Enable SSL for production
+  connectionTimeoutMillis: 5000, // Timeout in milliseconds
 });
 
 export default pool;
