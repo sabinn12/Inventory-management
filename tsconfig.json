@@ -12,7 +12,7 @@
     "sourceMap": true,                                  
     "removeComments": true,                             
     "resolveJsonModule": true   , 
-    "declaration": false                      
+                      
     
   },
   "include": ["src/**/*.ts"],
